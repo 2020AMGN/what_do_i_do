@@ -110,42 +110,44 @@
 
 <script>
     function fetchData() {
-        let selectedName = document.getElementById('nameSelect').value;
-        if (!selectedName) return;  // 이름이 선택되지 않았을 때는 API 호출 안 함
+    let selectedName = document.getElementById('nameSelect').value;
+    if (!selectedName) return;  // 이름이 선택되지 않았을 때는 API 호출 안 함
 
-        let url = 'https:/whatdoido.2020amugona.repl.co/' + selectedName;
-        //let url = 'http://127.0.0.1:8000/' + selectedName;
+    // 절대경로로 URL 설정
+    let url = 'https://whatdoido.2020amugona.repl.co/' + encodeURIComponent(selectedName);
+    //let url = 'http://127.0.0.1:8000/' + encodeURIComponent(selectedName);
 
-        // API 호출
-        fetch(url).then(response => response.json()).then(data => {
-            // 이름 설정
-            document.getElementById('name').textContent = data.people === 'join' ? `${selectedName}님` : '';
+    // API 호출
+    fetch(url).then(response => response.json()).then(data => {
+        // 이름 설정
+        document.getElementById('name').textContent = data.people === 'join' ? `${selectedName}님` : '';
 
-            // 이벤트 목록 설정
-            let eventsList = document.getElementById('events-list');
-            eventsList.innerHTML = "";  // 목록 초기화
-            if(data.events) {
-                data.events.split(', ').forEach(event => {
-                    let li = document.createElement('li');
-                    li.textContent = `▶ ${event}`;
-                    eventsList.appendChild(li);
-                });
-            }
+        // 이벤트 목록 설정
+        let eventsList = document.getElementById('events-list');
+        eventsList.innerHTML = "";  // 목록 초기화
+        if(data.events) {
+            data.events.split(', ').forEach(event => {
+                let li = document.createElement('li');
+                li.textContent = `▶ ${event}`;
+                eventsList.appendChild(li);
+            });
+        }
 
-            // 프로젝트 목록 설정
-            let projectsList = document.getElementById('projects-list');
-            projectsList.innerHTML = "";  // 목록 초기화
-            if(data.projects) {
-                data.projects.split(', ').forEach(project => {
-                    let li = document.createElement('li');
-                    li.textContent = `▶ ${project}`;
-                    projectsList.appendChild(li);
-                });
-            }
-        }).catch(error => {
-            console.error('API 호출에서 문제가 발생했습니다!', error);
-        });
-    };
+        // 프로젝트 목록 설정
+        let projectsList = document.getElementById('projects-list');
+        projectsList.innerHTML = "";  // 목록 초기화
+        if(data.projects) {
+            data.projects.split(', ').forEach(project => {
+                let li = document.createElement('li');
+                li.textContent = `▶ ${project}`;
+                projectsList.appendChild(li);
+            });
+        }
+    }).catch(error => {
+        console.error('API 호출에서 문제가 발생했습니다!', error);
+    });
+};
+
 </script>
 </body>
 </html>
