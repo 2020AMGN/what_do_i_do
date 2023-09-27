@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>쿠라운드 참가자 정보</title>
+    <style>
+      body {
+          font-family: 'Arial', sans-serif;
+          margin: 0;
+          padding: 0;
+          background-color: #eaeaea;
+      }
+
+      #app {
+          width: 50%;
+          margin: auto;
+          background-color: #fff;
+          box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.1);
+          padding: 20px;
+          border-radius: 8px;
+      }
+
+      h1, h2 {
+          color: #333;
+          text-align: center;
+      }
+
+      h1 {
+          margin-bottom: 20px;
+      }
+
+      ul {
+          padding: 0;
+          margin: 0;
+      }
+
+      li {
+          list-style-type: none;
+          background: #f4f4f4;
+          margin-bottom: 10px;
+          padding: 10px;
+          border-radius: 4px;
+          box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.1);
+      }
+
+      select {
+          padding: 10px;
+          margin-bottom: 30px;
+          width: 100%;
+          border: none;
+          box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.1);
+          border-radius: 4px;
+      }
+
+      #events, #projects {
+          margin-bottom: 20px;
+      }
+
+      p#name {
+          font-weight: bold;
+          margin-bottom: 20px;
+          text-align: center;
+          font-size: 18px;
+      }
+  </style>
+</head>
+<body>
+<div id="app">
+    <h1>상상을 현실로 만드는 쿠라운드 !</h1>
+    <select id="nameSelect" onchange="fetchData()">
+        <option value="">이름을 선택하세요</option>
+        <!-- 여기에 이름 목록 추가 -->
+        <option value="이인규">이인규</option>
+        <option value="김선민">김선민</option>
+        <option value="김태형">김태형</option>
+        <option value="박수현">박수현</option>
+        <option value="박준하">박준하</option>
+        <option value="안석찬">안석찬</option>
+        <option value="이수민">이수민</option>
+        <option value="이재준">이재준</option>
+        <option value="이지훈">이지훈</option>
+        <option value="이충언">이충언</option>
+        <option value="김동완">김동완</option>
+        <option value="임기윤">임기윤</option>
+        <option value="문세진">문세진</option>
+        <option value="이승준">이승준</option>
+        <option value="이재혁">이재혁</option>
+        <option value="홍정훈">홍정훈</option>
+        <option value="백휘민">백휘민</option>
+        <option value="오승훈">오승훈</option>
+        <option value="강지원">강지원</option>
+        <option value="장진우">장진우</option>
+        <option value="최령은">최령은</option>
+        <option value="김지현">김지현</option>
+        <option value="황규민">황규민</option>
+        <option value="hasseb">hasseb</option>
+        <!-- 다른 이름도 동일한 방식으로 추가 -->
+        <!-- ... -->
+    </select>
+    <p id="name"></p>
+    <div id="events">
+        <h2>참가하는 행사</h2>
+        <ul id="events-list"></ul>
+    </div>
+    <div id="projects">
+        <h2>참가프로젝트</h2>
+        <ul id="projects-list"></ul>
+    </div>
+</div>
+
+<script>
+    function fetchData() {
+        let selectedName = document.getElementById('nameSelect').value;
+        if (!selectedName) return;  // 이름이 선택되지 않았을 때는 API 호출 안 함
+
+        let url = 'https:/whatdoido.2020amugona.repl.co/' + selectedName;
+        //let url = 'http://127.0.0.1:8000/' + selectedName;
+
+        // API 호출
+        fetch(url).then(response => response.json()).then(data => {
+            // 이름 설정
+            document.getElementById('name').textContent = data.people === 'join' ? `${selectedName}님` : '';
+
+            // 이벤트 목록 설정
+            let eventsList = document.getElementById('events-list');
+            eventsList.innerHTML = "";  // 목록 초기화
+            if(data.events) {
+                data.events.split(', ').forEach(event => {
+                    let li = document.createElement('li');
+                    li.textContent = `▶ ${event}`;
+                    eventsList.appendChild(li);
+                });
+            }
+
+            // 프로젝트 목록 설정
+            let projectsList = document.getElementById('projects-list');
+            projectsList.innerHTML = "";  // 목록 초기화
+            if(data.projects) {
+                data.projects.split(', ').forEach(project => {
+                    let li = document.createElement('li');
+                    li.textContent = `▶ ${project}`;
+                    projectsList.appendChild(li);
+                });
+            }
+        }).catch(error => {
+            console.error('API 호출에서 문제가 발생했습니다!', error);
+        });
+    };
+</script>
+</body>
+</html>
